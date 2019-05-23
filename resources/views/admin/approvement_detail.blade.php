@@ -16,14 +16,17 @@
                     @csrf
                     @method('PUT')
                         <div class="control-group{{$errors->has('courier')?' has-error':''}}">
-                            
-                            
                               <center><a href="#"><img src="{{url('images/medium',$data[0]->proof_of_payment)}}" alt="" onclick="window.open(this.src)" border="3"></a></center>
-                            
                         </div>
                          <div class="control-group">
-                            @if($data[0]->status == 'verified')
+                            @if($data[0]->status == 'unverified')
                                 <center><input type="submit" name="submit" value="Verify Payment" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"></center>
+                            @elseif($data[0]->status == 'verified')
+                                <center><input type="submit" name="submit" value="Deliver Item" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"></center>
+                            @elseif($data[0]->status == 'delivered')
+                                <center><input type="submit" name="submit" value="Success" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"></center>
+                            @elseif($data[0]->status == 'expired')
+                                <center><b>Expired</b></center>
                             @else
                                 <center><b>Verified</b></center>
                             @endif

@@ -42,7 +42,9 @@ Route::group(['prefix'=>'admin', 'guard'=>'admin'],function(){
 });
 
 Route::group(['guard'=>'web'],function (){
+    Route::resource('/review','ReviewController');
     Route::resource('/transaction','TransactionController');
+    Route::post('/transactionStatus/{transaction}','TransactionController@updateStatus');
     Route::post('/addToCart','CartController@addToCart')->name('addToCart');
     Route::get('/viewcart','CartController@index');
     Route::get('/cart/deleteItem/{id}','CartController@deleteItem');

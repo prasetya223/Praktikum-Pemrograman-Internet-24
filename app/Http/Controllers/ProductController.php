@@ -98,9 +98,9 @@ class ProductController extends Controller
             foreach($request->file('filename') as $image)
             {                
                 $name=$image->getClientOriginalName();
-                $large_image_path=public_path('img/product/'.$name);
-                $medium_image_path=public_path('img/product/'.$name);
-                $small_image_path=public_path('img/product/'.$name);
+                $large_image_path=public_path('images/large/'.$name);
+                $medium_image_path=public_path('images/medium/'.$name);
+                $small_image_path=public_path('images/small/'.$name);
                         //// Resize Images
                 Image::make($image)->save($large_image_path);
                 Image::make($image)->resize(600,600)->save($medium_image_path);

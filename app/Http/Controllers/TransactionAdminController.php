@@ -22,6 +22,13 @@ class TransactionAdminController extends Controller
         return view('/admin/approvement',compact("transaction"));
     }
 
+    public function markReadAdmin(){
+        $admin = Admin::find(1);
+        
+        $admin->unreadNotifications()->update(['read_at' => now()]);
+        return response()->json($admin);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -83,7 +90,23 @@ class TransactionAdminController extends Controller
     public function update(Request $request, $id)
     {
         $transaction = Transaction::where('id',$id)->get()->first();
-        $transaction->status = 'verified';
+        if ($transaction->status == 'unverified') {
+            $transaction->status = 'verified';
+            $tuser= Transaction::where('id',$id)->first();
+            $user = User::find($tuser->user_id);
+            $user->notify(new UserNotification("<a href = '/transaction/$id'>Transaksi anda sudah Verified</a>"));
+        }
+        else if ($transaction->status == 'verified') {
+            $transaction->status = 'delivered';
+        }
+        else {
+            $transaction->status = 'success';
+            $transaction->save();
+            $tuser= Transaction::where('id',$id)->first();
+            $user = User::find($tuser->user_id);
+            $user->notify(new UserNotification("<a href = '/transaction/$id'>Transaksi anda sudah Delivered</a>"));   
+
+        }
         $transaction->save();
         return redirect('/admin/transactionAdmin');
     }

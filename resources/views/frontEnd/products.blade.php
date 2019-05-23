@@ -26,7 +26,7 @@
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-                                        <a href="{{url('/product-detail',$product->id)}}"><img src="{{asset('img/'.$product['image_name']) }}" alt="" /></a>
+                                        <a href="{{url('/product-detail',$product->id)}}"><img src="{{asset('images/large/'.$product['image_name']) }}" alt="" /></a>
                                         <h2>Rp {{number_format($product->price)}}</h2>
                                         <p>{{$product->product_name}}</p>
                                         <a href="{{url('/product-detail',$product->id)}}" class="btn btn-warning add-to-cart">View Product</a>

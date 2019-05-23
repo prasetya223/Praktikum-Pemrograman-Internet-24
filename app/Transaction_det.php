@@ -9,6 +9,6 @@ class Transaction_det extends Model
     protected $table = "transaction_details";
 	protected $primarykey ="id";
 	protected $fillable = [
-        'qty','discount','selling_price',
+        'transaction_id','product_id','qty','discount','selling_price',
     ];
 }

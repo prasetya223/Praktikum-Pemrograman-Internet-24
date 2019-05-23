@@ -2,31 +2,32 @@
 @section('title','Detail Page')
 @section('content')
 
+
     <div class="container">
+        <div class="col-sm-6">
+            @if(Session::has('message'))
+                <div class="alert alert-success text-center" role="alert">
+                    {{Session::get('message')}}
+                    @if(Session::has('success'))
+                    {{Session::get('success')}}
+                    <span><a href="/viewcart" class="nav-link"><u>View cart</u></a></span>@endif
+                </div>
+            @endif
         <div class="row">
-            <div class="col-sm-9">
-                @if(Session::has('message'))
-                    <div class="alert alert-success text-center" role="alert">
-                        {{Session::get('message')}}
-                        @if(Session::has('success'))
-                        {{Session::get('success')}}
-                        <span><a href="/viewcart" class="nav-link"><u>View cart</u></a></span>@endif
-                    </div>
-                @endif
                 
         <div class="product-details"><!--product-details-->
 
             <div class="col-sm-5">
-                    <a href="{{url('img/product/',$detail_product->image_name)}}">
-                        <img src="{{url('img/product/',$detail_product->image_name)}}" alt="" id="dynamicImage"/>
+                    <a href="{{url('images/large/',$detail_product->image_name)}}">
+                        <img src="{{url('images/large/',$detail_product->image_name)}}" alt="" id="dynamicImage"/>
                     </a>
                 </div>
 
                 <ul class="thumbnails" style="margin-left: -10px;">
                     <li>
                         @foreach($imagesGalleries as $imagesGallery)
-                            <a href="{{url('img/product/',$imagesGallery->image_name)}}" data-standard="{{url('images/small',$imagesGallery->image_name)}}">
-                                <img src="{{url('img/product/',$imagesGallery->image_name)}}" alt="" width="75" style="padding: 8px;">
+                            <a href="{{url('images/small/',$imagesGallery->image_name)}}" data-standard="{{url('images/small',$imagesGallery->image_name)}}">
+                                <img src="{{url('images/small/',$imagesGallery->image_name)}}" alt="" width="75" style="padding: 8px;">
                             </a>
                         @endforeach
                     </li>
@@ -79,91 +80,30 @@
                     <li><a href="#reviews" data-toggle="tab">Reviews (5)</a></li> --}}
                 </ul>
             </div>
-            <div class="tab-content">
-                <div class="tab-pane fade active in" id="reviews" >
-                    <form>
-                        <input type="text" placeholder="reviews" class="form-control" name=""><br>
-                        <input type="number" name="" placeholder="rating 1-5">
-                        <input type="submit" name="" style="float: right;">
-                    </form>
-                    
-                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-9">
+                    @foreach($review as $review)
+                        <p><b>{{$review->name}}</b></p>
+                        @php
+                            $a = 5;
+                        @endphp
+                        @for($i=0 ; $i< $review->rate; $i++)
+                            @php
+                                $a = $a-1;
+                            @endphp
+                            <span style="color: gold;" class="fa fa-star checked"></span>
+                        @endfor
+                        @for($i=0 ; $i< $a; $i++)
+                            <span style="color: grey;" class="fa fa-star"></span>
+                        @endfor
+                        <p input style="background-color: white;" readonly="">{{$review->content}}</p>
+                        <hr>
 
-                <div class="tab-pane fade" id="companyprofile" >
-                    <div class="col-sm-3">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="{{asset('frontEnd/images/home/gallery1.jpg')}}" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
+                    @endforeach
                     </div>
-                    <div class="col-sm-3">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="{{asset('frontEnd/images/home/gallery3.jpg')}}" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="{{asset('frontEnd/images/home/gallery2.jpg')}}" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="{{asset('frontEnd/images/home/gallery4.jpg')}}" alt="" />
-                                    <h2>$56</h2>
-                                    <p>Easy Polo Black Edition</p>
-                                    <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
-                <div class="tab-pane fade" id="reviews" >
-                    <div class="col-sm-12">
-                        <ul>
-                            <li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-                            <li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-                            <li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
-                        </ul>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <p><b>Write Your Review</b></p>
-
-                        <form action="#">
-                                        <span>
-                                            <input type="text" placeholder="Your Name"/>
-                                            <input type="email" placeholder="Email Address"/>
-                                        </span>
-                            <textarea name="" ></textarea>
-                            <b>Rating: </b> <img src="{{asset('frontEnd/images/product-details/rating.png')}}" alt="" />
-                            <button type="button" class="btn btn-default pull-right">
-                                Submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
             </div>
         </div><!--/category-tab-->
     </div>

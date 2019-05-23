@@ -13,8 +13,7 @@
 <body>
 <div id="loginbox">
     <form method="POST" action="{{ route('admin.login.submit') }}">
-    @csrf    
-    >
+    @csrf
         <div class="control-group normal_text"> <h3><img src="{{asset('img/logo.png')}}" alt="Logo" /></h3></div>
         <div class="control-group">
             <div class="controls">

@@ -33,19 +33,19 @@
                             <input type="hidden" name="id" value="{{$cart_data->id}}" id="id-{{$cart_data->id}}">
                             <input type="hidden" name="stock" id="stock" value="{{$cart_data->stock}}">
                             <tr id="tr-{{$cart_data->id}}">
-                                <td class="cart_product text-center">
+                                <td class="cart_product align-middle text-center">
                                     {{-- @foreach($image_products as $image_product) --}}
-                                        <a href=""><img class="img-fluid" src="{{url('img/product/',$image_products->image_name)}}" alt="" style="width: 100px;"></a>
+                                        <a href=""><img class="img-fluid" src="{{url('images/small/',$image_products->image_name)}}" alt="" style="width: 100px;"></a>
                                     {{-- @endforeach --}}
                                 </td>
-                                <td class="cart_description">
+                                <td class="cart_description align-middle text-center">
                                     <p style="font-size: 15px">{{$image_data->product_name}}</p>
                                 </td>
-                                <td class="cart_price">
+                                <td class="cart_price align-middle text-center">
                                     <p style="font-size: 15px">Rp {{number_format($image_data->price)}}</p>
                                 </td>
 
-                                <td class="cart_quantity">
+                                <td class="cart_quantity align-middle text-center">
                                     <div class="cart_quantity_button">
                                         <button id="klik1-{{$cart_data->id}}" class="btn btn-warning btn-sm"> - </button>
                                         <input class="cart_quantity_input-{{$cart_data->id}}" style="text-align: center; background-color: white;" type="text" name="quantity" value="{{$cart_data->qty}}" autocomplete="off" disabled="" size="3">
@@ -53,14 +53,14 @@
 
                                     </div>
                                 </td>
-                                <td>
+                                <td class="align-middle text-center">
                                     {{$cart_data->percentage}}%
                                 </td>
 
-                                <td class="cart_total">
+                                <td class="cart_total align-middle text-center">
                                     <p style="font-size: 15px">Rp {{number_format($cart_data->price*$cart_data->qty)}}</p>
                                 </td>
-                                <td class="cart_delete">
+                                <td class="cart_delete align-middle text-center">
                                     <a class="cart_quantity_delete" href="javascript:" rel="{{$cart_data->id}}"  id="hapus-{{$cart_data->id}}"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
@@ -75,7 +75,6 @@
                                     });
 
                                     $('#klik-{{$cart_data->id}}').click(function(){
-
                                         console.log("terklik");
                                         var baseUrl = window.location.protocol+"//"+window.location.host;
                                         var qty_awal = $('.cart_quantity_input-{{$cart_data->id}}').val();
@@ -83,20 +82,24 @@
                                         var qty_akhir = parseInt(qty_awal) + 1;
                                         var id = parseInt($('#id-{{$cart_data->id}}').val());
 
+                                        if (qty_akhir > stock) {
+                                            alert("Stock tidak mencukupi!");
+                                            return false;
+                                        }
                                         // axios.patch()
                                         $.ajax({
                                             url: baseUrl+'/cart/update/'+id,  
                                             type : 'post',
                                             dataType: 'JSON',
                                             data: {
-                                                "_token": "{{ csrf_token() }}",
-                                                id: id,
-                                                qty : qty_akhir,
-                                                },
+                                            "_token": "{{ csrf_token() }}",
+                                            id: id,
+                                            qty:qty_akhir
+                                            },
                                             success:function(response){
-                                                    alert("TEST");
-                                                    $('.cart_quantity_input-{{$cart_data->id}}').val(qty_akhir);
-                                                    event.preventDefault();
+                                                
+                                                $('.cart_quantity_input-{{$cart_data->id}}').val(qty_akhir);
+                                                event.preventDefault();
                                             },
                                             error:function(){
                                                 alert(qty_akhir);
@@ -104,6 +107,41 @@
 
                                         });
                                     });
+
+                                    $('#klik1-{{$cart_data->id}}').click(function(){
+                                        console.log("terklik");
+                                        var baseUrl = window.location.protocol+"//"+window.location.host;
+                                        var qty_awal = $('.cart_quantity_input-{{$cart_data->id}}').val();
+                                        var stock = parseInt($('#stock-{{$cart_data->id}}').val());
+                                        var qty_akhir = parseInt(qty_awal) - 1;
+                                        if (qty_akhir == 0 ) {
+                                            alert('Quantity tidak boleh 0 !');
+                                            return false;
+                                        }
+                                        var id = parseInt($('#id-{{$cart_data->id}}').val());
+
+                                        // axios.patch()
+                                        $.ajax({
+                                                url: baseUrl+'/cart/update/'+id,  
+                                                type : 'post',
+                                                dataType: 'JSON',
+                                                data: {
+                                                "_token": "{{ csrf_token() }}",
+                                                id: id,
+                                                qty:qty_akhir
+                                                },
+                                                success:function(response){
+                                                    
+                                                    $('.cart_quantity_input-{{$cart_data->id}}').val(qty_akhir);
+                                                    event.preventDefault();
+                                                },
+                                                error:function(){
+                                                alert(qty_akhir);
+                                                }
+
+                                            });
+                                    });
+
                                 });
                             </script>
                         @endforeach

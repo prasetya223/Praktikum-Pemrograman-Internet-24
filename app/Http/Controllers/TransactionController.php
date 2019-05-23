@@ -91,9 +91,9 @@ class TransactionController extends Controller
         {
                 $image=$request->file('proof_of_payment');
                 $name=$image->getClientOriginalName();
-                $large_image_path=public_path('img/product/'.$name);
-                $medium_image_path=public_path('img/product/'.$name);
-                $small_image_path=public_path('img/product/'.$name);
+                $large_image_path=public_path('images/large/'.$name);
+                $medium_image_path=public_path('images/medium/'.$name);
+                $small_image_path=public_path('images/small/'.$name);
                         //// Resize Images
                 Image::make($image)->save($large_image_path);
                 Image::make($image)->resize(600,600)->save($medium_image_path);
@@ -103,7 +103,13 @@ class TransactionController extends Controller
                
             
         }
+        $status = $transaction->status;
+        if ($status == 'delivered') {
+            $transaction->status='success';
+        }
+        else{
         $transaction->status='unverified';
+        }
         $transaction->save();
 
         return redirect('/transaction');
