@@ -20,11 +20,8 @@
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
-									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
 									<li class="nav-item"><a class="nav-link" href="/viewcart">Shopping Cart</a></li>
-									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
+									<li class="nav-item"><a class="nav-link" href="/transaction">Transactions</a></li>
 								</ul>
 							</li>
 							@if(Auth::check())
@@ -34,12 +31,12 @@
                                 $notif = DB::table('admin_notifications')->where('notifiable_id',$id)->get();
 								@endphp
 								<li class="nav-item submenu dropdown">
-									<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-									aria-expanded="false">Notification</a>
+									<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Notification</a>
+									@if($jum != 0)<span class="badge bg-danger text-light">{{$jum}}</span>@endif <span class="caret"></span>
 									<ul class="dropdown-menu">
-										<li class="nav-item"><a class="nav-link" id="readnotif">Mark All As Read</a></li>
+										<li class="nav-item"><a class="nav-link" id="readnotif"><b>Mark All As Read</b></a></li>
 										@foreach(auth()->user()->unreadNotifications as $notif)
-											<li><a href="#">{!!$notif->data!!}</a></li><br>
+										<li class="nav-item"><a>{!!$notif->data!!}</a></li>
 										@endforeach
 									</ul>
 								</li>
@@ -98,21 +95,21 @@
             console.log("terklik");
             var baseUrl = window.location.protocol+"//"+window.location.host;
             $.ajax({
-                  url: baseUrl+'/markRead',  
-                  type : 'post',
-                  dataType: 'JSON',
-                  data: {
+				url: baseUrl+'/markRead',  
+				type : 'post',
+				dataType: 'JSON',
+				data: {
                     "_token": "{{ csrf_token() }}",
                     
                     },
-                  success:function(response){
-                        location.reload();
-                  },
-                  error:function(){
+				success:function(response){
+					location.reload();
+				},
+				error:function(){
                     alert("GAGAL");
-                  }
+				}
 
-              });
+			});
         });
     });
 </script>

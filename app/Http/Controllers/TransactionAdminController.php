@@ -8,6 +8,7 @@ use App\Transaction_det;
 use App\Notifications\UserNotification;
 use App\User;
 use App\Admin;
+use Auth;
 
 class TransactionAdminController extends Controller
 {
@@ -27,10 +28,10 @@ class TransactionAdminController extends Controller
     }
 
     public function markReadAdmin(){
-        $admin = Admin::find(1);
+        $admin = Admin::find(Auth::id());
         
         $admin->unreadNotifications()->update(['read_at' => now()]);
-        return response()->json($admin);
+        return redirect()->back();
     }
 
     /**

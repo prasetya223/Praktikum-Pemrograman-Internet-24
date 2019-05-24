@@ -12,7 +12,7 @@
 <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
         {{-- <li class=""><a title="" href="{{url('/admin/settings')}}"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li> --}}
-        <li class="">
+        <li class="nav-item">
             <a class="dropdown-item" href="#"
                onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();">
@@ -24,16 +24,17 @@
             </form>
         </li>
         
-        <li class="nav-item submenu dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-            aria-expanded="false"><i class="icon icon-bell"></i> Notification
-            @if($jum != 0)<span class="badge" style="background-color: red;">1</span>@endif <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="nav-item"><a class="nav-link" id="readnotif">Mark All As Read</a></li>
-                    @foreach(auth()->user()->unreadNotifications as $notif)
-                        <li><a href="#">{!!$notif->data!!}</a></li><br>
-                    @endforeach
-                </ul>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon icon-bell"></i> Notification
+            @if($jum != 0)<span class="badge" style="background-color: red;">{{$jum}}</span>@endif <span class="caret"></span></a>
+
+            <ul class="dropdown-menu">
+                <center><button ><a href="/admin/markReadAdmin" style="color: green;">----Mark All As Read---</a></button></center>
+                @foreach($notif as $notif)
+                   <li><a href="#"> {!!$notif->data!!}</a></li>
+                @endforeach
+            </ul>
+
         </li>
 </div>
 <!--close-top-Header-menu-->
@@ -55,21 +56,20 @@
             console.log("terklik");
             var baseUrl = window.location.protocol+"//"+window.location.host;
             $.ajax({
-                  url: baseUrl+'/admin/markReadAdmin',  
-                  type : 'post',
-                  dataType: 'JSON',
-                  data: {
-                    "_token": "{{ csrf_token() }}",
-                    
-                    },
-                  success:function(response){
-                        location.reload();
-                  },
-                  error:function(){
-                    alert("GAGAL");
-                  }
+                url: baseUrl+'/admin/markReadAdmin',  
+                type : 'post',
+                dataType: 'JSON',
+                data: {
+                "_token": "{{ csrf_token() }}",
+                },
+                success:function(response){
+                location.reload();
+                },
+                error:function(){
+                alert("GAGAL");
+                }
 
-              });
+            });
         });
     });
 </script>

@@ -40,7 +40,7 @@ Route::group(['prefix'=>'admin', 'guard'=>'admin'],function(){
     Route::get('admin/logout','AuthAdmin\LoginController@logout')->name('admin.logout');
     Route::resource('/transactionAdmin','transactionAdminController');
     Route::resource('/response','ResponseController');
-    Route::post('/markReadAdmin','TransactionAdminController@markReadAdmin');
+    Route::get('/markReadAdmin','TransactionAdminController@markReadAdmin');
     Route::get('/createResponse/{response}','ResponseController@createResponse');
 });
 
