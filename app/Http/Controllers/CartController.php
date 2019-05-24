@@ -89,16 +89,15 @@ class CartController extends Controller
     public function update(request $request, Cart $cart){
         
         // $sku_size=DB::table('cart')->select('product_code','size','quantity')->where('id',$id)->first();
-        
-        $cart = Cart::where('id',$request->id)->get->first();
+        // return $cart;
+
         $cart->qty = $request->qty;
       // update cart
         $cart->save();
 
-        $output = '<div class="alert alert-success"> Data Updated </div>';
 
-        echo json_encode($output);
-        return redirect()->back();
+
+        return response()->json($cart);
 
     //     $cart_data = Cart::where('id',$id)->get()->first();
     //     // return($cart_data->qty);

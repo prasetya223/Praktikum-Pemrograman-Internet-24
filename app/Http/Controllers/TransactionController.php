@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\User;
+use App\Admin;
+use App\Notifications\AdminNotification;
 use App\Transaction;
 use App\Transaction_det;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image as Image;
@@ -25,6 +28,13 @@ class TransactionController extends Controller
         $transaction = Transaction::select('transactions.id','address','total','courier','timeout','status')->join('couriers','transactions.courier_id','=','couriers.id')->where('user_id',Auth::id())->orderBy('transactions.created_at','desc')->get();
         return view('/frontEnd/transaction_list',compact("transaction"));
     }
+
+    public function markRead(){
+        $user = User::find(Auth::id());
+        $user->unreadNotifications()->update(['read_at' => now()]);
+        return response()->json($user);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -100,20 +110,33 @@ class TransactionController extends Controller
                 Image::make($image)->resize(300,300)->save($small_image_path);
                 // $image->move(public_path().'/images/', $name);  
                 $transaction->proof_of_payment=$name;  
-               
             
         }
         $status = $transaction->status;
         if ($status == 'delivered') {
             $transaction->status='success';
+            $transaction->save();
+            $admin = Admin::first();
+            $admin->notify(new AdminNotification("<a href='/admin/transactionAdmin/$transaction->id'>ada transaksi yang berubah status menjadi Success</a>"));
+            return redirect()->back();
         }
         else{
-        $transaction->status='unverified';
+            $transaction->status='unverified';   
+            $transaction->save();
+            $admin = Admin::first();
+            $admin->notify(new AdminNotification("<a href='/admin/transactionAdmin/$transaction->id'>ada transaksi yang berubah status menjadi Unverified</a>"));
         }
-        $transaction->save();
 
         return redirect('/transaction');
     }
+
+    public function updateStatus(Request $request, Transaction $transaction)
+    {
+            $transaction->status='success';
+            $transaction->save();
+            return response()->json($transaction);
+        
+    }    
 
     /**
      * Remove the specified resource from storage.

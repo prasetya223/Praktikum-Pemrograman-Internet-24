@@ -29,6 +29,10 @@ class Admin extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function notifications(){
+        return $this->morphMany(AdminNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

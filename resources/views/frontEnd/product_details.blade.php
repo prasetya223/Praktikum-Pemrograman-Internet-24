@@ -4,7 +4,7 @@
 
 
     <div class="container">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             @if(Session::has('message'))
                 <div class="alert alert-success text-center" role="alert">
                     {{Session::get('message')}}
@@ -17,7 +17,7 @@
                 
         <div class="product-details"><!--product-details-->
 
-            <div class="col-sm-5">
+            <div class="col-sm-3">
                     <a href="{{url('images/large/',$detail_product->image_name)}}">
                         <img src="{{url('images/large/',$detail_product->image_name)}}" alt="" id="dynamicImage"/>
                     </a>
@@ -33,7 +33,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-5">
                 <form action="{{route('addToCart')}}" method="post" role="form">
                     @csrf
                     <input type="hidden" name="product_id" value="{{$detail_product->id}}">
@@ -72,8 +72,8 @@
             </div>
         </div><!--/product-details-->
 
+        <div class="col-sm-12 mt-5">
         <div class="category-tab shop-details-tab"><!--category-tab-->
-            <div class="col-sm-12">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#reviews" data-toggle="tab">Reviews</a></li>
                     {{-- <li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
@@ -105,6 +105,8 @@
                     </div>
                 </div>
             </div>
+            
+        </div>
         </div><!--/category-tab-->
     </div>
 </div>

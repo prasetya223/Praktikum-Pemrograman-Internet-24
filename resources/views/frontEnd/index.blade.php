@@ -74,7 +74,7 @@
                                         <input type="hidden" name="quantity" id="inputStock" value="1" required/>
 
                                         @if($product->stock > 0)
-                                        <a href="#" onclick="this.parentNode.submit(); return false;" class="social-info">
+                                        <a onclick="this.parentNode.submit(); return false;" class="social-info">
                                             <span class="ti-bag"></span>
                                             <p class="hover-text">add to cart</p>
                                         </a>

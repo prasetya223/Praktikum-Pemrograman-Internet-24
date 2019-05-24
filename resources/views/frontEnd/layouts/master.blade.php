@@ -50,7 +50,7 @@
 @section('slider')
     @include('frontEnd.layouts.slider')
 @show
-<div class=" mt-5 mb-custom">
+<div class=" mt-custom mb-custom">
 @yield('content')
 </div>
 @include('frontEnd.layouts.footer')

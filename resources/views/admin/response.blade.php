@@ -1,5 +1,5 @@
 @extends('backEnd.layouts.master')
-@section('title','List Products')
+@section('title','Review Products')
 @section('content')
     <div id="breadcrumb"> <a href="{{url('/admin')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="{{route('product.index')}}" class="current">Products</a></div>
     <div class="container-fluid">
@@ -10,50 +10,54 @@
         @endif
         <div class="widget-box">
             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                <h5>List Products</h5>
+                <h5>Review Products</h5>
             </div>
             <div class="widget-content nopadding">
                 <table class="table table-bordered data-table">
                     <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama Produk</th>
-                        <th>Harga</th>
-                        <th>Deskripsi</th>
+                        <th>Produk</th>
+                        <th>User</th>
+                        <th>Rate</th>
                         
-                        <th>Stok</th>
+                        <th>Comment</th>
+
                         
-                        <th>Foto</th>
+                        <th>Reply</th>
                         <th>Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($index as $index)
+                    @foreach($response as $response)
                         <tr class="gradeC">
                             <td>{{$loop->iteration}}</td>
-                            <td style="vertical-align: middle;">{{$index['product_name']}}</td>
-                            <td style="vertical-align: middle;">{{$index['price']}}</td>
-                            <td style="vertical-align: middle;">{{$index['description']}}</td>
+                            <td style="vertical-align: middle;">{{$response->product_name}}</td>
+                            <td style="vertical-align: middle;">{{$response->user_id}}</td>
+                            <td style="vertical-align: middle;text-align: center;">{{$response->rate}}</td>
                             
-                            <td style="vertical-align: middle;">{{$index['stock']}}</td>
+                            <td style="vertical-align: middle;">{{$response->content}}</td>
                             
-                            <td style="text-align: center;"><img src="{{asset('images/small/'.$index['image_name']) }}" alt="" width="50"></td>
+                            <td style="text-align: center;">
+                                @if($response->status == NULL)
+                                    <a href="/admin/createResponse/{{$response->id}}"><button class="btn btn-success">reply</button></a>
+                                @else
+                                    <p>Replied</p>
+                                @endif
+                            </td>
                             <td style="width: 12%; text-align: center;">
                                 {{-- <div class="btn-group"> --}}
-                                    <form action="/admin/product/{{$index->id}}/edit" method="GET">
-                                    @csrf
-                                    <button class="btn btn-warning btn">Edit</button>
-                                    </form>
-                                    <form action="/admin/product/{{$index->id}}/" method="POST">
+                                    
+                                    {{-- <form action="/response/{{$index->id}}/" method="POST">
                                     @method("DELETE")
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger col-12" >Delete<i class="fa fa-trash-o fa-fw" ></i>
-
+                                    @csrf --}}
+                                    <button type="submit" class="btn btn-danger" >Delete<i class="fa fa-trash-o fa-fw" ></i>
                                 {{-- </button> --}}
                                 </div>
-                            </form>
+                            {{-- </form> --}}
                             </td>
                         </tr>
+
                     @endforeach
                     </tbody>
                 </table>

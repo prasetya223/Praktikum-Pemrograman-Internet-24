@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Transaction_det;
+use App\Notifications\UserNotification;
+use App\User;
+use App\Admin;
+
 class TransactionAdminController extends Controller
 {
     /**
@@ -18,7 +22,7 @@ class TransactionAdminController extends Controller
     }
     public function index()
     {
-        $transaction = Transaction::select('transactions.id','name','address','total','courier','timeout','transactions.status')->join('users','users.id','=','transactions.user_id')->join('couriers','transactions.courier_id','=','couriers.id')->get();
+        $transaction = Transaction::select('transactions.id','name','address','total','courier','timeout','transactions.status')->join('users','users.id','=','transactions.user_id')->join('couriers','transactions.courier_id','=','couriers.id')->orderBy('transactions.created_at','desc')->get();
         return view('/admin/approvement',compact("transaction"));
     }
 
@@ -91,23 +95,23 @@ class TransactionAdminController extends Controller
     {
         $transaction = Transaction::where('id',$id)->get()->first();
         if ($transaction->status == 'unverified') {
+            
             $transaction->status = 'verified';
+            $transaction->save();
             $tuser= Transaction::where('id',$id)->first();
             $user = User::find($tuser->user_id);
             $user->notify(new UserNotification("<a href = '/transaction/$id'>Transaksi anda sudah Verified</a>"));
         }
-        else if ($transaction->status == 'verified') {
+        else{
+
             $transaction->status = 'delivered';
-        }
-        else {
-            $transaction->status = 'success';
             $transaction->save();
+
             $tuser= Transaction::where('id',$id)->first();
             $user = User::find($tuser->user_id);
             $user->notify(new UserNotification("<a href = '/transaction/$id'>Transaksi anda sudah Delivered</a>"));   
-
         }
-        $transaction->save();
+        
         return redirect('/admin/transactionAdmin');
     }
 

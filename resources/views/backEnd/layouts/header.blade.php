@@ -4,6 +4,11 @@
 </div>
 <!--close-Header-part-->
 <!--top-Header-menu-->
+@php
+    $jum = DB::table('admin_notifications')->where('read_at',NULL)->count();
+    $notif = DB::table('admin_notifications')->where('read_at',NULL)->get();
+@endphp
+
 <div id="user-nav" class="navbar navbar-inverse">
     <ul class="nav">
         {{-- <li class=""><a title="" href="{{url('/admin/settings')}}"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li> --}}
@@ -17,10 +22,58 @@
             <form id="logout-form" action="{{ route('admin.logout') }}" {{-- method="POST" --}} style="display: none;">
                 @csrf
             </form>
-
         </li>
-    </ul>
+        
+        <li class="nav-item submenu dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false"><i class="icon icon-bell"></i> Notification
+            @if($jum != 0)<span class="badge" style="background-color: red;">1</span>@endif <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a class="nav-link" id="readnotif">Mark All As Read</a></li>
+                    @foreach(auth()->user()->unreadNotifications as $notif)
+                        <li><a href="#">{!!$notif->data!!}</a></li><br>
+                    @endforeach
+                </ul>
+        </li>
 </div>
+<!--close-top-Header-menu-->
+<!--start-top-serch-->
+
+<script src="{{asset('frontEnd/js/jquery.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('#readnotif').click(function(){
+            console.log("terklik");
+            var baseUrl = window.location.protocol+"//"+window.location.host;
+            $.ajax({
+                  url: baseUrl+'/admin/markReadAdmin',  
+                  type : 'post',
+                  dataType: 'JSON',
+                  data: {
+                    "_token": "{{ csrf_token() }}",
+                    
+                    },
+                  success:function(response){
+                        location.reload();
+                  },
+                  error:function(){
+                    alert("GAGAL");
+                  }
+
+              });
+        });
+    });
+</script>
+
 <!--close-top-Header-menu-->
 <!--start-top-serch-->
 
